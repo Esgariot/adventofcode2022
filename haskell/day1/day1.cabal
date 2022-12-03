@@ -1,0 +1,16 @@
+cabal-version:      3.4
+name:               day1
+version:            0.1.0.0
+build-type:         Simple
+common warnings
+    ghc-options: -Wall
+
+executable day1
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:
+                    base ^>=4.17.0.0,
+                    filepath ^>= 1.4.2,
+                    split
+    hs-source-dirs:   app
+    default-language: GHC2021
