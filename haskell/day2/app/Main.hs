@@ -67,7 +67,7 @@ parseRound = do
   return Round {opponent, outcome}
 
 parseInput :: String -> [Round]
-parseInput input = rights $ parse parseRound "" <$> (lines input)
+parseInput = rights . (parse parseRound "" <$>) . lines
 
 main :: IO ()
 main = getArgs >>= parseArgs >>= print . sum . map (\r@Round {opponent} -> score (strategy r) opponent) . parseInput

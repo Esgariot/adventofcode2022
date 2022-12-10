@@ -1,7 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-
 module Main where
-
 import Data.Char (isSpace)
 import Data.List (sortOn)
 import Data.List.Split (splitWhen)
@@ -14,7 +12,7 @@ parseArg [input] = readFile input
 parseArg _ = exitFailure
 
 parseGroups :: String -> [[Int]]
-parseGroups xs = parse <$> (groupInputs xs)
+parseGroups = (parse <$>) . groupInputs
   where
     groupInputs = splitWhen (all isSpace) . lines
     parse = map (read :: String -> Int)
