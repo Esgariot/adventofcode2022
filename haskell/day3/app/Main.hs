@@ -3,22 +3,17 @@
 module Main where
 
 import Data.Function (on)
-import System.Environment (getArgs)
 import Data.Set qualified as Set (elems, fromList, intersection)
+import System.Environment (getArgs)
 import System.Exit (exitFailure)
 
-data Rucksack a = Rucksack {compartment1 :: a, compartment2 :: a} deriving (Show)
+data Group a = Group a a a deriving (Show)
 
-makeRucksack :: [a] -> Rucksack [a]
-makeRucksack xs = Rucksack {compartment1 = take half xs, compartment2 = take half (reverse xs)}
+findBadge :: Ord a => Group [a] -> a
+findBadge (Group elf1 elf2 elf3) =
+  (head) $ elf1 /\ elf2 /\ elf3
   where
-    half = length xs `div` 2
-
-findError :: Ord a => Rucksack [a] -> a
-findError Rucksack {compartment1, compartment2} =
-  (head . Set.elems) $ intersection compartment1 compartment2
-  where
-    intersection = Set.intersection `on` Set.fromList
+    (/\) = (Set.elems <$>) . Set.intersection `on` Set.fromList
 
 priority :: Char -> Int
 priority n
@@ -28,12 +23,16 @@ priority n
   where
     minus = flip ((-) `on` fromEnum)
 
-parseRucksacks :: String -> [Rucksack String]
-parseRucksacks = (makeRucksack <$>) . lines
+parseGroups :: String -> [Group String]
+parseGroups = groupUp . lines
+  where
+    groupUp (a : b : c : []) = [Group a b c]
+    groupUp (a : b : c : xs) = Group a b c : groupUp xs
+    groupUp _ = error "Unexpected group count"
 
 parseArgs :: [FilePath] -> IO String
 parseArgs [input] = readFile input
 parseArgs _ = exitFailure
 
 main :: IO ()
-main = getArgs >>= parseArgs >>= print . sum . (priority . findError <$>) . parseRucksacks
+main = getArgs >>= parseArgs >>= print . sum . (priority . findBadge <$>) . parseGroups
