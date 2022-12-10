@@ -26,7 +26,7 @@ priority n
 parseGroups :: String -> [Group String]
 parseGroups = groupUp . lines
   where
-    groupUp (a : b : c : []) = [Group a b c]
+    groupUp [] = []
     groupUp (a : b : c : xs) = Group a b c : groupUp xs
     groupUp _ = error "Unexpected group count"
 
