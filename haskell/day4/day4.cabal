@@ -1,0 +1,15 @@
+cabal-version:      3.4
+name:               day4
+version:            0.1.0.0
+author:             Esgariot
+build-type:         Simple
+common warnings
+    ghc-options: -Wall
+
+executable day4
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base,
+                      parsec
+    hs-source-dirs:   app
+    default-language: GHC2021
